@@ -1,0 +1,44 @@
+@import "reset";
+@import "mixins";
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Arial";
+	background: darkgray;
+}
+
+
+.game-box {
+	position: relative;
+	background: darkkhaki;
+	box-sizing: content-box;
+	top: 200px;
+	left: 40%;
+	font-size: 0;
+	border: 1px solid grey;
+}
+
+.game-item {
+	border: 1px solid grey;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	font-size: 14px;
+	cursor: pointer;
+	color: white;
+	display: inline-block;
+}
+
+.game-panel {
+	background: darkgreen;
+	padding: 10px;
+}
+
+.react-draggable {
+	position: relative;
+	cursor: move;
+}
