@@ -15,8 +15,10 @@ class Game extends React.Component {
 		});
 		G.clearDuplicatedMatrixItems(props.size);
 
+		let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
 		this.state = {
-			matrix: G.matrix
+			matrix: G.matrix,
+			numberToInsert: numberToInsert ? numberToInsert : 2
 		};
 
 		G.history.save();
@@ -24,6 +26,7 @@ class Game extends React.Component {
 
 	
 	componentDidMount() {
+		G.gameComponent = this;
 		G.fieldSize = this.props.size;
 		G.refs.gameBox = this.refs.gameBox;
 		G.refs.gamePanel = this.refs.gamePanel;
@@ -55,7 +58,9 @@ class Game extends React.Component {
 								{ G.matrix[k] }
 							</div>
 							:
-							<span>&nbsp;</span>  }
+							<div style={{ background: (this.state.dragItemIndex === k) ? '#9D9751' : 'transparent' }}>
+								&nbsp;
+							</div>  }
 					</div>
 				}) }
 
@@ -67,7 +72,9 @@ class Game extends React.Component {
 							onStop={ G.drag.onStop }
 							bounds={ '.game-box' }
 							grid={[1, 1]} >
-								<div ref="gameDragEl" style={{ background: G.colors[2] }}>2</div>
+								<div ref="gameDragEl" style={{ background: G.colors[this.state.numberToInsert] }}>
+									{ this.state.numberToInsert }
+								</div>
 						</Draggable>
 					</div>
 				</div>

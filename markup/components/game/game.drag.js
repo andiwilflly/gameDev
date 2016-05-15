@@ -13,26 +13,43 @@ export default {
 
 		if(!pos || pos.itemValue) {
 			// Need go to start position
-			drapToPos(draggable, 0, 0, 700);
+			drapToPos(draggable, 0, 0, 400);
 		} else {
 			// Next step
 			let offsetLeft = pos.fieldPos.x * G.default.itemSize - dragContainerPadding;
 			let offsetTop = (pos.fieldPos.y - G.default.fieldSize) * G.default.itemSize - dragContainerPadding;
-			drapToPos(draggable, offsetLeft, offsetTop, 300);
+			drapToPos(draggable, offsetLeft, offsetTop, 100).then(()=> {
+
+				G.default.matrix[pos.dragItemIndex] = G.default.gameComponent.state.numberToInsert;
+				G.default.history.save();
+				G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
+				//G.default.matrix[pos.dragItemIndex] = +G.default.gameComponent.state.numberToInsert + 2;
+				G.default.gameComponent.setState({
+					matrix: G.default.matrix,
+					dragItemIndex: -1
+				});
+				// G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
+				// G.default.history.save();
+				// G.default.gameComponent.setState({
+				// 	matrix: G.default.matrix,
+				// });
+				drapToPos(draggable, 0, 0, 0);
+			});
 		}
 	},
 
 
 	onDrag(e, ui) {
-		_calculateDragPos(ui);
+		let dragItemIndex = _calculateDragPos(ui).dragItemIndex;
+		G.default.gameComponent.setState({ dragItemIndex });
 	},
 
 
 	onStart(e, ui) {
 		e.target.style.zIndex = 1001;
 	}
-
 }
+
 
 function _calculateDragPos(ui) {
 	//console.log('onDrag', pos);
@@ -48,19 +65,21 @@ function _calculateDragPos(ui) {
 	if(fieldPos.x >= G.default.fieldSize || fieldPos.x < 0) return false;
 	if(fieldPos.y >= G.default.fieldSize || fieldPos.y < 0) return false;
 
-	// console.log(G.default.matrix[dragItemIndex]);
-
 	return {
 		itemValue: G.default.matrix[dragItemIndex],
-		fieldPos
+		fieldPos,
+		dragItemIndex
 	};
 }
 
 
 function drapToPos(draggable, offsetLeft, offsetTop, time = 700) {
-	G.default.refs.gameDragEl.style.transition = 'all ' + time/1000 + 's';
-	draggable.setState({ offsetLeft, offsetTop }); // Go to start position
-	setTimeout(()=> {
-		G.default.refs.gameDragEl.style.transition = 'inherit';
-	}, time);
+	return new Promise((resolve, reject)=> {
+		G.default.refs.gameDragEl.style.transition = 'all ' + time/1000 + 's';
+		draggable.setState({ offsetLeft, offsetTop }); // Go to start position
+		setTimeout(()=> {
+			G.default.refs.gameDragEl.style.transition = 'inherit';
+			resolve();
+		}, time);
+	});
 }
