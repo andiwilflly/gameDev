@@ -49,7 +49,7 @@ export default {
 	},
 	
 
-	drapToPos(draggable, offsetLeft, offsetTop, time = 700) {
+	dragToPos(draggable, offsetLeft, offsetTop, time = 700) {
 		return new Promise((resolve, reject)=> {
 			G.default.refs.gameDragEl.style.transition = 'all ' + time / 1000 + 's';
 			draggable.setState({offsetLeft, offsetTop}); // Go to start position
@@ -64,7 +64,7 @@ export default {
 	fadeOut(el, time, htmlToReplace) {
 		return new Promise((resolve, reject)=> {
 			el.style.transition = 'all ' + time / 1000 + 's';
-			el.style.opacity = 0;
+			el.style.opacity = 0.5;
 			if(htmlToReplace) el.innerHTML = htmlToReplace;
 			setTimeout(()=> {
 				el.style.transition = 'inherit';

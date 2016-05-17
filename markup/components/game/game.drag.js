@@ -13,28 +13,29 @@ export default {
 
 		if(!pos || pos.itemValue) {
 			// Need go to start position
-			G.default.drapToPos(draggable, 0, 0, 400);
+			G.default.dragToPos(draggable, 0, 0, 400);
 		} else {
 			// Next step
-			// let offsetLeft = pos.fieldPos.x * G.default.itemSize - dragContainerPadding;
-			// let offsetTop = (pos.fieldPos.y - G.default.fieldSize) * G.default.itemSize - dragContainerPadding;
-			// this.drapToPos(offsetLeft, offsetTop, 100).then(()=> {
+			let offsetLeft = pos.fieldPos.x * G.default.itemSize - dragContainerPadding;
+			let offsetTop = (pos.fieldPos.y - G.default.fieldSize) * G.default.itemSize - dragContainerPadding;
+			G.default.dragToPos(draggable, offsetLeft, offsetTop, 100).then(()=> {
 
 				G.default.matrix[pos.dragItemIndex] = G.default.gameComponent.state.numberToInsert;
 				G.default.history.save();
-				G.default.calculations.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize, draggable);
-				//G.default.matrix[pos.dragItemIndex] = +G.default.gameComponent.state.numberToInsert + 2;
-				G.default.gameComponent.setState({
-					matrix: G.default.matrix,
-					dragItemIndex: -1
+				G.default.calculations.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize).then(()=> {
+					//G.default.matrix[pos.dragItemIndex] = +G.default.gameComponent.state.numberToInsert + 2;
+					G.default.gameComponent.setState({
+						matrix: G.default.matrix,
+						dragItemIndex: -1
+					});
+					G.default.dragToPos(draggable, 0, 0, 0);
+					// G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
+					// G.default.history.save();
+					// G.default.gameComponent.setState({
+					// 	matrix: G.default.matrix,
+					// });
 				});
-				// G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
-				// G.default.history.save();
-				// G.default.gameComponent.setState({
-				// 	matrix: G.default.matrix,
-				// });
-				G.default.drapToPos(draggable, 0, 0, 0);
-			// });
+			});
 		}
 	},
 

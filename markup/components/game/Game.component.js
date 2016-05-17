@@ -7,21 +7,7 @@ class Game extends React.Component {
 
 	constructor(props) {
 		super();
-		const elementsToShow = G.getElementsToShow(props.size);
-		_.forEach(elementsToShow, function (count, countOfElements) {
-			_.forEach(new Array(count), function () {
-				G.insertItemToMatrix(countOfElements, props.size);
-			});
-		});
-		G.calculations.clearDuplicatedMatrixItems(props.size);
-
-		let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
-		this.state = {
-			matrix: G.matrix,
-			numberToInsert: numberToInsert ? numberToInsert : 2
-		};
-
-		G.history.save();
+		this.state = {};
 	}
 
 	
@@ -29,6 +15,20 @@ class Game extends React.Component {
 		G.gameComponent = this;
 		G.fieldSize = this.props.size;
 		G.refs = this.refs;
+
+		const elementsToShow = G.getElementsToShow(this.props.size);
+		_.forEach(elementsToShow, (count, countOfElements)=> {
+			_.forEach(new Array(count), ()=> {
+				G.insertItemToMatrix(countOfElements, this.props.size);
+			})
+		});
+		G.calculations.clearDuplicatedMatrixItems(this.props.size);
+		let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
+		this.setState({
+			matrix: G.matrix,
+			numberToInsert: numberToInsert ? numberToInsert : 2
+		});
+		G.history.save();
 	}
 
 
