@@ -13,7 +13,7 @@ class Game extends React.Component {
 				G.insertItemToMatrix(countOfElements, props.size);
 			});
 		});
-		G.clearDuplicatedMatrixItems(props.size);
+		G.calculations.clearDuplicatedMatrixItems(props.size);
 
 		let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
 		this.state = {
@@ -28,10 +28,7 @@ class Game extends React.Component {
 	componentDidMount() {
 		G.gameComponent = this;
 		G.fieldSize = this.props.size;
-		G.refs.gameBox = this.refs.gameBox;
-		G.refs.gamePanel = this.refs.gamePanel;
-		G.refs.gameResp = this.refs.gameResp;
-		G.refs.gameDragEl = this.refs.gameDragEl;
+		G.refs = this.refs;
 	}
 
 
@@ -51,6 +48,7 @@ class Game extends React.Component {
 			<div className="game-box" ref="gameBox" style={{ width: size * G.itemSize }}>
 				{ _.map(new Array(gameItemsLength), (v, k)=> {
 					return <div className='game-item'
+								ref={ `gameItem_${k}` }
 								onClick={ this.gameItemClick }
 								key={k}>
 						{ (G.matrix[k]) ?

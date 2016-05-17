@@ -1,4 +1,5 @@
 import HISTORY from 'components/game/game.history.js';
+import calculations from 'components/game/game.calculations.js';
 import drag from 'components/game/game.drag.js';
 
 export default {
@@ -10,6 +11,7 @@ export default {
 
 	history: HISTORY,
 	drag: drag,
+	calculations: calculations,
 
 	matrix: {},
 
@@ -45,49 +47,29 @@ export default {
 			this.insertItemToMatrix(countOfElements, size);
 		}
 	},
+	
 
-
-	clearDuplicatedMatrixItems(size = 1) {
-		this.clearMatrixItem(0, size);
+	drapToPos(draggable, offsetLeft, offsetTop, time = 700) {
+		return new Promise((resolve, reject)=> {
+			G.default.refs.gameDragEl.style.transition = 'all ' + time / 1000 + 's';
+			draggable.setState({offsetLeft, offsetTop}); // Go to start position
+			setTimeout(()=> {
+				G.default.refs.gameDragEl.style.transition = 'inherit';
+				resolve();
+			}, time);
+		});
 	},
 
 
-	clearMatrixItem(itemIndex, size = 1) {
-		if(size*size < itemIndex) return; // Break loop
-
-		const _top = (currRow, itemIndex, number)=> {
-			var formula = itemIndex - size;
-			if(number == this.matrix[formula]) delete this.matrix[formula];
-			return this.matrix[formula];
-		};
-		const _left = (currRow, itemIndex, number)=> {
-			var formula = itemIndex - 1;
-			if(currRow === Math.floor(formula / size)) {
-				if(number == this.matrix[formula]) delete this.matrix[formula];
-				return this.matrix[formula];
-			}
-		};
-		const _right = (currRow, itemIndex, number)=> {
-			var formula = itemIndex + 1;
-			if(currRow === Math.floor(formula / size)) {
-				if(number == this.matrix[formula]) delete this.matrix[formula];
-				return this.matrix[formula];
-			}
-		};
-		const _bottom = (currRow, itemIndex, number)=> {
-			var formula = itemIndex + size;
-			if(number == this.matrix[formula]) delete this.matrix[formula];
-			return this.matrix[formula];
-		};
-
-		var number = parseInt(this.matrix[itemIndex]);
-		var currRow = Math.floor(itemIndex / size);
-		if(this.matrix[itemIndex]) {
-			_top(currRow, itemIndex, number); // look top
-			_left(currRow, itemIndex, number); // look left
-			_right(currRow, itemIndex, number); // look right
-			_bottom(currRow, itemIndex, number); // look bottom
-		}
-		this.clearMatrixItem(itemIndex+1, size);
+	fadeOut(el, time, htmlToReplace) {
+		return new Promise((resolve, reject)=> {
+			el.style.transition = 'all ' + time / 1000 + 's';
+			el.style.opacity = 0;
+			if(htmlToReplace) el.innerHTML = htmlToReplace;
+			setTimeout(()=> {
+				el.style.transition = 'inherit';
+				resolve();
+			}, time);
+		})
 	}
 };

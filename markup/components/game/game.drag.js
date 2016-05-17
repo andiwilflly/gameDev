@@ -13,16 +13,16 @@ export default {
 
 		if(!pos || pos.itemValue) {
 			// Need go to start position
-			drapToPos(draggable, 0, 0, 400);
+			G.default.drapToPos(draggable, 0, 0, 400);
 		} else {
 			// Next step
-			let offsetLeft = pos.fieldPos.x * G.default.itemSize - dragContainerPadding;
-			let offsetTop = (pos.fieldPos.y - G.default.fieldSize) * G.default.itemSize - dragContainerPadding;
-			drapToPos(draggable, offsetLeft, offsetTop, 100).then(()=> {
+			// let offsetLeft = pos.fieldPos.x * G.default.itemSize - dragContainerPadding;
+			// let offsetTop = (pos.fieldPos.y - G.default.fieldSize) * G.default.itemSize - dragContainerPadding;
+			// this.drapToPos(offsetLeft, offsetTop, 100).then(()=> {
 
 				G.default.matrix[pos.dragItemIndex] = G.default.gameComponent.state.numberToInsert;
 				G.default.history.save();
-				G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
+				G.default.calculations.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize, draggable);
 				//G.default.matrix[pos.dragItemIndex] = +G.default.gameComponent.state.numberToInsert + 2;
 				G.default.gameComponent.setState({
 					matrix: G.default.matrix,
@@ -33,8 +33,8 @@ export default {
 				// G.default.gameComponent.setState({
 				// 	matrix: G.default.matrix,
 				// });
-				drapToPos(draggable, 0, 0, 0);
-			});
+				G.default.drapToPos(draggable, 0, 0, 0);
+			// });
 		}
 	},
 
@@ -70,16 +70,4 @@ function _calculateDragPos(ui) {
 		fieldPos,
 		dragItemIndex
 	};
-}
-
-
-function drapToPos(draggable, offsetLeft, offsetTop, time = 700) {
-	return new Promise((resolve, reject)=> {
-		G.default.refs.gameDragEl.style.transition = 'all ' + time/1000 + 's';
-		draggable.setState({ offsetLeft, offsetTop }); // Go to start position
-		setTimeout(()=> {
-			G.default.refs.gameDragEl.style.transition = 'inherit';
-			resolve();
-		}, time);
-	});
 }
