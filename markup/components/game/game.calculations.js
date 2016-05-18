@@ -22,7 +22,12 @@ export default {
 					this.left(size, currRow, itemIndex, number),
 					this.right(size, currRow, itemIndex, number),
 					this.bottom(size, currRow, itemIndex, number)
-				]).then(()=> {
+				]).then((currScore)=> {
+					var score = currScore.reduce((a, b) => (a > 0 ? a : (b > 0 ? b : 0)), 0);
+					G.default.gameComponent.setState({
+						currScore: score + G.default.gameComponent.state.currScore
+					});
+
 					localResolve();
 					if(resolve) this.clearMatrixItem(itemIndex + 1, size, resolve);
 				})
@@ -42,9 +47,9 @@ export default {
 				let itemToMove = G.default.refs[`gameItem_${formula}`].childNodes[0];
 				G.default.fadeOut(itemToMove, 700, '+' + number).then(()=> {
 					delete G.default.matrix[formula];
-					resolve();
+					resolve(number);
 				});
-			} else { resolve(); }
+			} else { resolve(0); }
 		});
 	},
 	
@@ -58,10 +63,10 @@ export default {
 					let itemToMove = G.default.refs[`gameItem_${formula}`].childNodes[0];
 					G.default.fadeOut(itemToMove, 700, '+' + number).then(()=> {
 						delete G.default.matrix[formula];
-						resolve();
+						resolve(number);
 					});
-				} else { resolve(); }
-			} else { resolve(); }
+				} else { resolve(0); }
+			} else { resolve(0); }
 		});
 	},
 	
@@ -75,10 +80,10 @@ export default {
 					let itemToMove = G.default.refs[`gameItem_${formula}`].childNodes[0];
 					G.default.fadeOut(itemToMove, 700, '+' + number).then(()=> {
 						delete G.default.matrix[formula];
-						resolve();
+						resolve(number);
 					});
-				} else { resolve(); }
-			} else { resolve(); }
+				} else { resolve(0); }
+			} else { resolve(0); }
 		});
 	},
 
@@ -91,9 +96,9 @@ export default {
 				let itemToMove = G.default.refs[`gameItem_${formula}`].childNodes[0];
 				G.default.fadeOut(itemToMove, 700, '+' + number).then(()=> {
 					delete G.default.matrix[formula];
-					resolve();
+					resolve(number);
 				});
-			} else { resolve(); }
+			} else { resolve(0); }
 		});
 	}
 }

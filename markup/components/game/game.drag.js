@@ -21,13 +21,14 @@ export default {
 			G.default.dragToPos(draggable, offsetLeft, offsetTop, 100).then(()=> {
 
 				G.default.matrix[pos.dragItemIndex] = G.default.gameComponent.state.numberToInsert;
-				G.default.history.save();
 				G.default.calculations.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize).then(()=> {
 					//G.default.matrix[pos.dragItemIndex] = +G.default.gameComponent.state.numberToInsert + 2;
 					G.default.gameComponent.setState({
 						matrix: G.default.matrix,
 						dragItemIndex: -1
 					});
+					//G.default.history.save();
+					G.default.fadeInAllElements(G.default.fieldSize);
 					G.default.dragToPos(draggable, 0, 0, 0);
 					// G.default.clearMatrixItem(pos.dragItemIndex, G.default.fieldSize);
 					// G.default.history.save();

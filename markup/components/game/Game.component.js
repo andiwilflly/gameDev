@@ -7,7 +7,9 @@ class Game extends React.Component {
 
 	constructor(props) {
 		super();
-		this.state = {};
+		this.state = {
+			currScore: 0
+		};
 	}
 
 	
@@ -22,13 +24,17 @@ class Game extends React.Component {
 				G.insertItemToMatrix(countOfElements, this.props.size);
 			})
 		});
-		G.calculations.clearDuplicatedMatrixItems(this.props.size);
-		let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
 		this.setState({
-			matrix: G.matrix,
-			numberToInsert: numberToInsert ? numberToInsert : 2
+			matrix: G.matrix
 		});
-		G.history.save();
+		G.calculations.clearDuplicatedMatrixItems(this.props.size).then(()=> {
+			let numberToInsert = G.matrix[U.random(0, 25)]; // More number, more 2 in result
+			this.setState({
+				matrix: G.matrix,
+				numberToInsert: numberToInsert ? numberToInsert : 2
+			});
+			G.history.save();
+		});
 	}
 
 
@@ -75,6 +81,10 @@ class Game extends React.Component {
 								</div>
 						</Draggable>
 					</div>
+				</div>
+
+				<div style={{ fontSize: '16px' }}>
+					Score: { this.state.currScore }
 				</div>
 			</div>
 		);

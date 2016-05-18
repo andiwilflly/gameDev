@@ -61,10 +61,17 @@ export default {
 	},
 
 
+	fadeInAllElements(size) {
+		_.forEach(new Array(size * size), (v, itemIndex)=> {
+			G.default.refs[`gameItem_${itemIndex}`].childNodes[0].style.opacity = 1;
+		});
+	},
+
+
 	fadeOut(el, time, htmlToReplace) {
 		return new Promise((resolve, reject)=> {
 			el.style.transition = 'all ' + time / 1000 + 's';
-			el.style.opacity = 0.5;
+			el.style.opacity = 0;
 			if(htmlToReplace) el.innerHTML = htmlToReplace;
 			setTimeout(()=> {
 				el.style.transition = 'inherit';
